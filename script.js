@@ -79,7 +79,10 @@ function renderCarCards(cars = getStoredCars()) {
           <p class="text-muted mb-2">${car.model}</p>
           <p class="price-tag mb-3">${car.price}</p>
           <p class="text-secondary mb-4">${car.description}</p>
-          <a href="car.html?id=${car.id}" class="btn btn-outline-primary mt-auto">Xem chi tiết</a>
+          <div class="mt-auto d-flex flex-column gap-2">
+            <a href="car.html?id=${car.id}" class="btn btn-outline-primary">Xem chi tiết</a>
+            <button type="button" class="btn btn-primary add-cart-button" data-car-id="${car.id}">Thêm vào giỏ</button>
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +136,205 @@ function getStoredInquiries() {
     localStorage.setItem('carMarketInquiries', JSON.stringify([]));
     return [];
   }
+}
+
+function getStoredCart() {
+  const saved = localStorage.getItem('carMarketCart');
+  if (!saved) return [];
+  try {
+    return JSON.parse(saved);
+  } catch (error) {
+    localStorage.setItem('carMarketCart', JSON.stringify([]));
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem('carMarketCart', JSON.stringify(cart));
+}
+
+function getStoredOrders() {
+  const saved = localStorage.getItem('carMarketOrders');
+  if (!saved) return [];
+  try {
+    return JSON.parse(saved);
+  } catch (error) {
+    localStorage.setItem('carMarketOrders', JSON.stringify([]));
+    return [];
+  }
+}
+
+function saveOrders(orders) {
+  localStorage.setItem('carMarketOrders', JSON.stringify(orders));
+}
+
+function parsePrice(price) {
+  return Number(price.replace(/[^\d]/g, '')) || 0;
+}
+
+function formatPrice(value) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₫';
+}
+
+function updateCartCount() {
+  const count = getStoredCart().reduce((sum, item) => sum + item.quantity, 0);
+  const countEl = document.getElementById('cart-count');
+  if (countEl) countEl.textContent = count;
+}
+
+function addToCart(carId) {
+  const cars = getStoredCars();
+  const car = cars.find(item => item.id === carId);
+  if (!car) return;
+  const cart = getStoredCart();
+  const existing = cart.find(item => item.carId === carId);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      cartId: `cart-${carId}`,
+      carId,
+      name: car.name,
+      price: car.price,
+      priceValue: parsePrice(car.price),
+      image: car.image,
+      quantity: 1
+    });
+  }
+  saveCart(cart);
+  renderCartItems();
+  updateCartCount();
+  showFormAlert('cart-alert', `Đã thêm "${car.name}" vào giỏ hàng.`);
+}
+
+function changeCartItemQuantity(carId, delta) {
+  const cart = getStoredCart();
+  const item = cart.find(i => i.carId === carId);
+  if (!item) return;
+  item.quantity += delta;
+  if (item.quantity < 1) {
+    const index = cart.findIndex(i => i.carId === carId);
+    if (index !== -1) cart.splice(index, 1);
+  }
+  saveCart(cart);
+  renderCartItems();
+  updateCartCount();
+}
+
+function removeCartItem(carId) {
+  const cart = getStoredCart().filter(item => item.carId !== carId);
+  saveCart(cart);
+  renderCartItems();
+  updateCartCount();
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cart-items');
+  const summary = document.getElementById('cart-summary');
+  const checkout = document.getElementById('checkout-button');
+  if (!container) return;
+  const cart = getStoredCart();
+  if (!cart.length) {
+    container.innerHTML = '<div class="card p-4 text-center text-muted">Giỏ hàng trống.</div>';
+    if (checkout) checkout.setAttribute('disabled', 'disabled');
+    if (summary) summary.innerHTML = '';
+    return;
+  }
+  const total = cart.reduce((sum, item) => sum + item.priceValue * item.quantity, 0);
+  container.innerHTML = cart.map(item => `
+    <div class="card p-3 mb-3">
+      <div class="row gx-3 align-items-center">
+        <div class="col-auto">
+          <img src="${item.image}" alt="${item.name}" class="rounded-3" style="width:130px; height:85px; object-fit:cover;">
+        </div>
+        <div class="col">
+          <h5 class="mb-1">${item.name}</h5>
+          <p class="text-muted mb-1">${item.price}</p>
+          <p class="mb-1">Số lượng: <strong>${item.quantity}</strong></p>
+        </div>
+        <div class="col-auto text-end">
+          <button type="button" class="btn btn-sm btn-outline-secondary cart-action mb-2" data-action="increase" data-car-id="${item.carId}">+</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary cart-action mb-2" data-action="decrease" data-car-id="${item.carId}">-</button>
+          <button type="button" class="btn btn-sm btn-outline-danger cart-action" data-action="remove" data-car-id="${item.carId}">Xóa</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  if (checkout) checkout.removeAttribute('disabled');
+  if (summary) summary.innerHTML = `<h5 class="fw-semibold">Tổng: ${formatPrice(total)}</h5>`;
+}
+
+function setupCartUI() {
+  const carGrid = document.getElementById('car-grid');
+  if (carGrid) {
+    carGrid.addEventListener('click', event => {
+      const button = event.target.closest('button.add-cart-button');
+      if (!button) return;
+      const carId = button.dataset.carId;
+      if (carId) addToCart(carId);
+    });
+  }
+
+  const cartItems = document.getElementById('cart-items');
+  if (cartItems) {
+    cartItems.addEventListener('click', event => {
+      const button = event.target.closest('button.cart-action');
+      if (!button) return;
+      const action = button.dataset.action;
+      const carId = button.dataset.carId;
+      if (!carId) return;
+      if (action === 'increase') changeCartItemQuantity(carId, 1);
+      if (action === 'decrease') changeCartItemQuantity(carId, -1);
+      if (action === 'remove') removeCartItem(carId);
+    });
+  }
+
+  const checkout = document.getElementById('checkout-button');
+  if (checkout) {
+    checkout.addEventListener('click', () => {
+      const cart = getStoredCart();
+      if (!cart.length) {
+        showFormAlert('cart-alert', 'Giỏ hàng trống, vui lòng thêm xe trước khi thanh toán.', 'warning');
+        return;
+      }
+
+      const nameInput = document.getElementById('checkout-name');
+      const phoneInput = document.getElementById('checkout-phone');
+      const emailInput = document.getElementById('checkout-email');
+      const addressInput = document.getElementById('checkout-address');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const phone = phoneInput ? phoneInput.value.trim() : '';
+      const email = emailInput ? emailInput.value.trim() : '';
+      const address = addressInput ? addressInput.value.trim() : '';
+
+      if (!name || !phone || !email || !address) {
+        showFormAlert('cart-alert', 'Vui lòng nhập đầy đủ thông tin khách hàng trước khi thanh toán.', 'danger');
+        return;
+      }
+
+      const orders = getStoredOrders();
+      orders.unshift({
+        orderId: `order-${Date.now()}`,
+        customer: { name, phone, email, address },
+        items: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
+        total: cart.reduce((sum, item) => sum + item.priceValue * item.quantity, 0),
+        submitted: new Date().toLocaleString()
+      });
+      saveOrders(orders);
+      saveCart([]);
+      renderCartItems();
+      updateCartCount();
+      if (nameInput) nameInput.value = '';
+      if (phoneInput) phoneInput.value = '';
+      if (emailInput) emailInput.value = '';
+      if (addressInput) addressInput.value = '';
+      showFormAlert('cart-alert', 'Thanh toán thành công. Cảm ơn bạn đã mua hàng!', 'success');
+    });
+  }
+
+  updateCartCount();
+  renderCartItems();
 }
 
 function saveInquiries(inquiries) {
@@ -251,6 +453,41 @@ function renderAdminInquiries() {
   `).join('');
 }
 
+function renderAdminOrders() {
+  const orderContainer = document.getElementById('order-history');
+  if (!orderContainer) return;
+  const orders = getStoredOrders();
+  if (!orders.length) {
+    orderContainer.innerHTML = '<div class="col-12"><div class="card p-4 text-center text-muted">Chưa có đơn hàng nào.</div></div>';
+    return;
+  }
+
+  orderContainer.innerHTML = orders.map(order => `
+    <div class="col-12">
+      <div class="card p-4">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+          <div>
+            <h5 class="mb-1">Đơn hàng: ${order.orderId}</h5>
+            <p class="mb-1 text-muted">Khách: ${order.customer.name} • ${order.customer.phone}</p>
+            <p class="mb-1 text-muted">Email: ${order.customer.email}</p>
+            <p class="mb-1 text-muted">Địa chỉ: ${order.customer.address}</p>
+            <p class="mb-0"><strong>Ngày:</strong> ${order.submitted}</p>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-success">Tổng: ${formatPrice(order.total)}</span>
+          </div>
+        </div>
+        <div>
+          <h6>Chi tiết sản phẩm:</h6>
+          <ul class="mb-0">
+            ${order.items.map(item => `<li>${item.name} x${item.quantity} - ${item.price}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
 function renderCarDetail() {
   const detailContainer = document.getElementById('car-detail');
   if (!detailContainer) return;
@@ -333,10 +570,16 @@ function showLoginMessage(message, type = 'danger') {
 function handleLoginForm() {
   const form = document.getElementById('login-form');
   if (!form) return;
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    const username = document.getElementById('login-username').value.trim();
-    const password = document.getElementById('login-password').value.trim();
+
+  function processLogin(event) {
+    if (event) event.preventDefault();
+
+    const usernameInput = document.getElementById('login-username');
+    const passwordInput = document.getElementById('login-password');
+    if (!usernameInput || !passwordInput) return;
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
 
     if (!username || !password) {
       showLoginMessage('Vui lòng nhập đầy đủ tài khoản và mật khẩu.');
@@ -356,7 +599,9 @@ function handleLoginForm() {
     }
 
     showLoginMessage('Tên đăng nhập hoặc mật khẩu không đúng.');
-  });
+  }
+
+  form.addEventListener('submit', processLogin);
 }
 
 function setupAdminPage() {
@@ -531,15 +776,23 @@ function setupAdminPage() {
 
   renderAdminCars();
   renderAdminInquiries();
+  renderAdminOrders();
 }
 
 function initPage() {
   renderCarCards();
   setupSearchAndFilter();
   setupCustomerContactForm();
+  renderCartUI();
   renderCarDetail();
   handleLoginForm();
   setupAdminPage();
+}
+
+function renderCartUI() {
+  const cartSection = document.getElementById('cart');
+  if (!cartSection) return;
+  setupCartUI();
 }
 
 document.addEventListener('DOMContentLoaded', initPage);

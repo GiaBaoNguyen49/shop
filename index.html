@@ -20,6 +20,7 @@
           <li class="nav-item"><a class="nav-link" href="#featured">Xe nổi bật</a></li>
           <li class="nav-item"><a class="nav-link" href="#why">Ưu điểm</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Liên hệ</a></li>
+          <li class="nav-item"><a class="nav-link" href="#cart">Giỏ hàng <span id="cart-count" class="badge bg-primary ms-1">0</span></a></li>
           <li class="nav-item"><a class="nav-link btn btn-outline-light ms-2" href="login.html">Đăng nhập</a></li>
         </ul>
       </div>
@@ -124,6 +125,40 @@
       <div id="car-grid" class="row g-4">
         <!-- Cards được tạo bởi script.js -->
       </div>
+    </section>
+
+    <section id="cart" class="mb-5">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
+        <div>
+          <h3 class="fw-bold">Giỏ hàng của bạn</h3>
+          <p class="text-muted mb-0">Xem nhanh sản phẩm đã thêm và thanh toán ngay.</p>
+        </div>
+        <button id="checkout-button" class="btn btn-primary" type="button">Thanh toán</button>
+      </div>
+      <div id="cart-alert"></div>
+      <div id="cart-items"></div>
+      <div id="checkout-form" class="card p-4 mb-4 bg-light">
+        <h5 class="mb-3">Thông tin thanh toán</h5>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" id="checkout-name" class="form-control" placeholder="Nguyễn Văn A">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Số điện thoại</label>
+            <input type="tel" id="checkout-phone" class="form-control" placeholder="0909123456">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" id="checkout-email" class="form-control" placeholder="name@example.com">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Địa chỉ nhận hàng</label>
+            <input type="text" id="checkout-address" class="form-control" placeholder="Địa chỉ giao hàng">
+          </div>
+        </div>
+      </div>
+      <div id="cart-summary" class="mt-4 text-end"></div>
     </section>
 
     <section id="why" class="mb-5">
