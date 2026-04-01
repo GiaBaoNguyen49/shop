@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarMarket - Bán xe hơi đẹp</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-CdbZxD0Q9bEzrZaOaHJ3xHd6bo4DVzYZ1Qp5I3Qi3ld5rWME2T6TF6KidHZV4k5q" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">CarMarket</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Trang chủ</a></li>
+          <li class="nav-item"><a class="nav-link" href="#featured">Xe nổi bật</a></li>
+          <li class="nav-item"><a class="nav-link" href="#why">Ưu điểm</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Liên hệ</a></li>
+          <li class="nav-item"><a class="nav-link btn btn-outline-light ms-2" href="login.html">Đăng nhập</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero-section py-5">
+    <div class="container hero-content">
+      <div class="row align-items-center gy-5 justify-content-center text-center">
+        <div class="col-lg-6">
+          <span class="feature-badge mb-3">Nhà bán xe uy tín</span>
+          <h1 class="display-5 fw-bold">CarMarket – Chọn xe đẹp, sang và an tâm</h1>
+          <p class="lead mt-4">Khám phá xe mới nhất, giá tốt và thông tin chi tiết rõ ràng. Mua bán xe chuyên nghiệp ngay hôm nay.</p>
+          <div class="hero-actions d-flex flex-column flex-sm-row justify-content-lg-start gap-3 mt-4">
+            <a href="#featured" class="btn btn-primary btn-lg">Xem xe ngay</a>
+            <a href="login.html" class="btn btn-outline-light btn-lg">Đăng nhập</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image-wrapper shadow-lg rounded-4 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1200&q=80" alt="Xe đẹp" class="img-fluid">
+          </div>
+        </div>
+      </div>
+
+      <div class="row hero-cards row-cols-1 row-cols-md-3 g-3 mt-5 justify-content-center">
+        <div class="col-lg-4">
+          <div class="card p-4">
+            <h5 class="card-title">100+ mẫu xe</h5>
+            <p class="text-muted mb-0">Từ xe thể thao đến xe điện, lựa chọn đa dạng cho mọi nhu cầu.</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card p-4">
+            <h5 class="card-title">Thông tin rõ ràng</h5>
+            <p class="text-muted mb-0">Chi tiết model, giá và điểm nổi bật giúp bạn quyết định nhanh.</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card p-4">
+            <h5 class="card-title">Quản lý dễ dàng</h5>
+            <p class="text-muted mb-0">Admin có thể thêm xe mới và xoá xe cũ chỉ trong vài giây.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-video-section py-5">
+    <div class="video-frame" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80');">
+      <div class="video-overlay"></div>
+      <div class="video-caption container">
+        <div class="text-center">
+          <span class="feature-badge mb-3">Giới thiệu xe</span>
+          <h2 class="fw-bold">Xem video thử để cảm nhận phong cách và tốc độ</h2>
+          <p class="lead mx-auto mt-3" style="max-width: 680px;">Một đoạn video ngắn giúp bạn thấy rõ hơn phong cách xe và cảm giác lái trước khi lựa chọn.</p>
+          <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
+            <div class="video-feature p-3 rounded-4 bg-white bg-opacity-90">Thiết kế ấn tượng</div>
+            <div class="video-feature p-3 rounded-4 bg-white bg-opacity-90">Tốc độ mạnh mẽ</div>
+            <div class="video-feature p-3 rounded-4 bg-white bg-opacity-90">Trải nghiệm chân thực</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container py-5">
+    <section class="text-center mb-5">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="fw-bold">Bộ sưu tập xe đã chọn</h2>
+          <p class="text-muted">Những mẫu xe hot nhất và đáng tin cậy, với giá rõ ràng và thông tin chi tiết.</p>
+        </div>
+        <div class="col-lg-6">
+          <div class="card bg-light p-4 shadow-sm">
+            <h5 class="card-title">Tài khoản admin sẵn sàng</h5>
+            <p class="card-text mb-1"><strong>Username:</strong> admin</p>
+            <p class="card-text"><strong>Password:</strong> admin123</p>
+            <a class="btn btn-dark" href="login.html">Đăng nhập quản trị</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="featured" class="mb-5">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div>
+          <h3 class="fw-bold">Xe đang bán</h3>
+          <p class="text-muted mb-0">Nhấn vào từng xe để xem đầy đủ thông tin chi tiết và điểm nổi bật.</p>
+        </div>
+        <a class="btn btn-outline-light" href="login.html">Quản lý danh sách</a>
+      </div>
+
+      <div class="search-bar mb-4">
+        <div class="row g-3">
+          <div class="col-lg-7">
+            <input id="search-input" type="text" class="form-control form-control-lg" placeholder="Tìm kiếm theo tên xe, model hoặc giá...">
+          </div>
+          <div class="col-lg-5">
+            <div class="btn-group category-filter" role="group" aria-label="Lọc danh mục">
+              <button type="button" class="btn btn-outline-primary active" data-category="all">Tất cả</button>
+              <button type="button" class="btn btn-outline-primary" data-category="sport">Thể thao</button>
+              <button type="button" class="btn btn-outline-primary" data-category="sedan">Sedan</button>
+              <button type="button" class="btn btn-outline-primary" data-category="electric">Xe điện</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="car-grid" class="row g-4">
+        <!-- Cards được tạo bởi script.js -->
+      </div>
+    </section>
+
+    <section id="why" class="mb-5">
+      <div class="row gx-5 align-items-center">
+        <div class="col-lg-6">
+          <img src="https://images.unsplash.com/photo-1541447271646-5f5b09f5f6fd?auto=format&fit=crop&w=1200&q=80" alt="Xe đẹp" class="img-fluid rounded shadow-sm">
+        </div>
+        <div class="col-lg-6">
+          <h3 class="fw-bold">Tại sao chọn CarMarket?</h3>
+          <ul class="list-unstyled mt-4">
+            <li class="mb-3"><span class="badge bg-primary me-2">1</span>Danh sách xe cập nhật, giá minh bạch và hình ảnh thực tế.</li>
+            <li class="mb-3"><span class="badge bg-primary me-2">2</span>Thông tin chi tiết về xe, điểm nổi bật và trang riêng cho từng mẫu.</li>
+            <li class="mb-3"><span class="badge bg-primary me-2">3</span>Giao diện đơn giản, đẹp và dễ dùng trên máy tính lẫn điện thoại.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="bg-light rounded-4 p-4">
+      <div class="row gy-4">
+        <div class="col-lg-5">
+          <h3 class="fw-bold">Liên hệ</h3>
+          <p>Gửi thông tin để nhân viên liên hệ nhanh chóng hoặc để lại yêu cầu mua xe.</p>
+          <p><strong>Hotline:</strong> 0909 123 456</p>
+          <p><strong>Email:</strong> contact@carmarket.vn</p>
+          <p><strong>Địa chỉ:</strong> 123 Đường Xe VIP, TP. Hồ Chí Minh</p>
+        </div>
+        <div class="col-lg-7">
+          <div class="card p-4 shadow-sm">
+            <h4 class="mb-4">Gửi yêu cầu tư vấn</h4>
+            <div id="contact-alert"></div>
+            <form id="customer-contact-form">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Họ và tên</label>
+                  <input type="text" id="customer-name" class="form-control" placeholder="Nguyễn Văn A" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Số điện thoại</label>
+                  <input type="tel" id="customer-phone" class="form-control" placeholder="0909123456" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Email</label>
+                  <input type="email" id="customer-email" class="form-control" placeholder="name@example.com" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Nội dung</label>
+                  <textarea id="customer-message" class="form-control" rows="3" placeholder="Tôi muốn mua xe..." required></textarea>
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-primary" type="submit">Gửi yêu cầu</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-4">
+    <p class="mb-0">© 2026 CarMarket. Website bán xe đơn giản, đẹp mắt và dễ sử dụng.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-5C7dFJqLkO0fK9zXXoA5tGRHW9gpdFKJp3zBsQeGKpG2CrB8EqKXJj5x7Gu1ew7X" crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+</html>

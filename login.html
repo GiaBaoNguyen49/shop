@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập - CarMarket</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-CdbZxD0Q9bEzrZaOaHJ3xHd6bo4DVzYZ1Qp5I3Qi3ld5rWME2T6TF6KidHZV4k5q" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-bg-image"></div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">CarMarket</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLogin" aria-controls="navLogin" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navLogin">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="auth-page d-flex align-items-center justify-content-center py-5">
+    <div class="row justify-content-center w-100">
+      <div class="col-md-8 col-lg-6">
+        <div class="card auth-card border-0">
+          <div class="card-body p-5">
+            <h2 class="card-title mb-4">Đăng nhập</h2>
+            <div id="login-alert"></div>
+            <form id="login-form">
+              <div class="mb-3">
+                <label for="login-username" class="form-label">Tên tài khoản</label>
+                <input type="text" id="login-username" class="form-control" placeholder="admin hoặc user">
+              </div>
+              <div class="mb-4">
+                <label for="login-password" class="form-label">Mật khẩu</label>
+                <input type="password" id="login-password" class="form-control" placeholder="admin123 hoặc user123">
+              </div>
+              <button class="btn btn-primary w-100" type="submit">Đăng nhập</button>
+            </form>
+            <div class="mt-4 text-center text-muted">
+              <p class="mb-1">Admin: admin / admin123</p>
+              <p class="mb-0">Khách: user / user123</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <p class="mb-0">CarMarket - Đăng nhập để quản lý hoặc duyệt xe</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-5C7dFJqLkO0fK9zXXoA5tGRHW9gpdFKJp3zBsQeGKpG2CrB8EqKXJj5x7Gu1ew7X" crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+</html>
