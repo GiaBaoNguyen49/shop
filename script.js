@@ -54,6 +54,24 @@ function saveCars(cars) {
   localStorage.setItem('carMarketCars', JSON.stringify(cars));
 }
 
+function getStoredUsers() {
+  const saved = localStorage.getItem('carMarketUsers');
+  if (!saved) {
+    localStorage.setItem('carMarketUsers', JSON.stringify([]));
+    return [];
+  }
+  try {
+    return JSON.parse(saved);
+  } catch (error) {
+    localStorage.setItem('carMarketUsers', JSON.stringify([]));
+    return [];
+  }
+}
+
+function saveUsers(users) {
+  localStorage.setItem('carMarketUsers', JSON.stringify(users));
+}
+
 function getQueryParam(name) {
   const params = new URLSearchParams(window.location.search);
   return params.get(name);
@@ -592,7 +610,9 @@ function handleLoginForm() {
       return;
     }
 
-    if (username === 'user' && password === 'user123') {
+    const users = getStoredUsers();
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
       sessionStorage.setItem('carMarketUser', 'customer');
       window.location.href = 'index.html';
       return;
@@ -602,6 +622,57 @@ function handleLoginForm() {
   }
 
   form.addEventListener('submit', processLogin);
+}
+
+function showRegisterMessage(message, type = 'danger') {
+  const box = document.getElementById('register-alert');
+  if (!box) return;
+  box.innerHTML = `<div class="alert alert-${type} mt-3">${message}</div>`;
+}
+
+function handleRegisterForm() {
+  const form = document.getElementById('register-form');
+  if (!form) return;
+
+  function processRegister(event) {
+    if (event) event.preventDefault();
+
+    const usernameInput = document.getElementById('register-username');
+    const emailInput = document.getElementById('register-email');
+    const passwordInput = document.getElementById('register-password');
+    const confirmPasswordInput = document.getElementById('register-confirm-password');
+    if (!usernameInput || !emailInput || !passwordInput || !confirmPasswordInput) return;
+
+    const username = usernameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    const confirmPassword = confirmPasswordInput.value.trim();
+
+    if (!username || !email || !password || !confirmPassword) {
+      showRegisterMessage('Vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showRegisterMessage('Mật khẩu và xác nhận mật khẩu không khớp.');
+      return;
+    }
+
+    const users = getStoredUsers();
+    if (users.some(u => u.username === username || u.email === email)) {
+      showRegisterMessage('Tên tài khoản hoặc email đã tồn tại.');
+      return;
+    }
+
+    users.push({ username, email, password });
+    saveUsers(users);
+    showRegisterMessage('Đăng ký thành công! Bạn có thể đăng nhập ngay.', 'success');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2000);
+  }
+
+  form.addEventListener('submit', processRegister);
 }
 
 function setupAdminPage() {
@@ -786,6 +857,7 @@ function initPage() {
   renderCartUI();
   renderCarDetail();
   handleLoginForm();
+  handleRegisterForm();
   setupAdminPage();
 }
 
