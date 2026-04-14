@@ -72,9 +72,69 @@ function saveUsers(users) {
   localStorage.setItem('carMarketUsers', JSON.stringify(users));
 }
 
+function getDefaultAvatar(username) {
+  return `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`;
+}
+
+function getCurrentUser() {
+  const userType = sessionStorage.getItem('carMarketUser');
+  if (!userType) return null;
+  if (userType === 'admin') {
+    return { username: 'admin', email: 'admin@carmarket.com', avatar: 'https://i.pravatar.cc/150?u=admin' };
+  }
+  const username = sessionStorage.getItem('carMarketUsername');
+  if (!username) return null;
+  const users = getStoredUsers();
+  const user = users.find(u => u.username === username);
+  return user ? { ...user, avatar: user.avatar || getDefaultAvatar(user.username) } : null;
+}
+
 function getQueryParam(name) {
   const params = new URLSearchParams(window.location.search);
   return params.get(name);
+}
+
+function renderNavUser() {
+  const user = getCurrentUser();
+  const navContainer = document.querySelector('.navbar-nav.ms-auto');
+  if (!navContainer) return;
+
+  const loginLink = navContainer.querySelector('a[href="login.html"]');
+  const registerLink = navContainer.querySelector('a[href="register.html"]');
+
+  if (user) {
+    // Hide login and register links
+    if (loginLink) loginLink.style.display = 'none';
+    if (registerLink) registerLink.style.display = 'none';
+
+    // Add user info and logout
+    const userHtml = `
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="${user.avatar}" alt="Avatar" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+          ${user.username}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item" href="profile.html">Trang cá nhân</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#" id="logout-link">Đăng xuất</a></li>
+        </ul>
+      </li>
+    `;
+    navContainer.insertAdjacentHTML('beforeend', userHtml);
+
+    // Add logout event
+    document.getElementById('logout-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      sessionStorage.removeItem('carMarketUser');
+      sessionStorage.removeItem('carMarketUsername');
+      window.location.href = 'index.html';
+    });
+  } else {
+    // Show login and register if not logged in
+    if (loginLink) loginLink.style.display = '';
+    if (registerLink) registerLink.style.display = '';
+  }
 }
 
 function renderCarCards(cars = getStoredCars()) {
@@ -614,6 +674,7 @@ function handleLoginForm() {
     const user = users.find(u => u.username === username && u.password === password);
     if (user) {
       sessionStorage.setItem('carMarketUser', 'customer');
+      sessionStorage.setItem('carMarketUsername', username);
       window.location.href = 'index.html';
       return;
     }
@@ -639,12 +700,14 @@ function handleRegisterForm() {
 
     const usernameInput = document.getElementById('register-username');
     const emailInput = document.getElementById('register-email');
+    const avatarInput = document.getElementById('register-avatar');
     const passwordInput = document.getElementById('register-password');
     const confirmPasswordInput = document.getElementById('register-confirm-password');
-    if (!usernameInput || !emailInput || !passwordInput || !confirmPasswordInput) return;
+    if (!usernameInput || !emailInput || !avatarInput || !passwordInput || !confirmPasswordInput) return;
 
     const username = usernameInput.value.trim();
     const email = emailInput.value.trim();
+    const avatar = avatarInput.value.trim();
     const password = passwordInput.value.trim();
     const confirmPassword = confirmPasswordInput.value.trim();
 
@@ -664,7 +727,12 @@ function handleRegisterForm() {
       return;
     }
 
-    users.push({ username, email, password });
+    users.push({
+      username,
+      email,
+      password,
+      avatar: avatar || getDefaultAvatar(username)
+    });
     saveUsers(users);
     showRegisterMessage('Đăng ký thành công! Bạn có thể đăng nhập ngay.', 'success');
     setTimeout(() => {
@@ -850,6 +918,26 @@ function setupAdminPage() {
   renderAdminOrders();
 }
 
+function renderProfile() {
+  const user = getCurrentUser();
+  const profileContent = document.getElementById('profile-content');
+  if (!profileContent) return;
+
+  if (!user) {
+    profileContent.innerHTML = '<p class="text-muted">Vui lòng đăng nhập để xem trang cá nhân.</p>';
+    return;
+  }
+
+  profileContent.innerHTML = `
+    <img src="${user.avatar}" alt="Avatar" class="profile-avatar mx-auto d-block">
+    <h4>${user.username}</h4>
+    <p class="text-muted mb-2">${user.email}</p>
+    <div class="mt-4">
+      <a href="index.html" class="btn btn-primary">Quay lại trang chủ</a>
+    </div>
+  `;
+}
+
 function initPage() {
   renderCarCards();
   setupSearchAndFilter();
@@ -859,6 +947,8 @@ function initPage() {
   handleLoginForm();
   handleRegisterForm();
   setupAdminPage();
+  renderNavUser();
+  renderProfile();
 }
 
 function renderCartUI() {
